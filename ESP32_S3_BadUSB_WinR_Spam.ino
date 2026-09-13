@@ -1,6 +1,6 @@
 /*
-  ESP32-S3 BadUSB - Auto-type Fake Ransomware Message
-  Types the entire ransomware prank message automatically
+  ESP32-S3 BadUSB - Auto-type Fake Ransomware in Terminal
+  Opens terminal and types the ransomware message for realism
 */
 
 #include "USB.h"
@@ -12,7 +12,7 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   
-  Serial.println("\nESP32-S3 BadUSB - Fake Ransomware");
+  Serial.println("\nESP32-S3 BadUSB - Fake Ransomware Terminal");
   Serial.println("Starting in 3 seconds...\n");
   
   Keyboard.begin();
@@ -20,7 +20,7 @@ void setup() {
   
   delay(3000);
   
-  typeRansomwareMessage();
+  openTerminalAndType();
 }
 
 void loop() {
@@ -28,64 +28,23 @@ void loop() {
 }
 
 void typeChar(char c) {
-  uint8_t modifier = 0;
-  uint8_t keycode = 0;
-  
-  // Lowercase letters a-z
-  if (c >= 'a' && c <= 'z') {
-    keycode = 0x04 + (c - 'a');
-  }
-  // Uppercase letters A-Z
-  else if (c >= 'A' && c <= 'Z') {
-    keycode = 0x04 + (c - 'A');
-    modifier = 0x02; // Shift
-  }
-  // Numbers
-  else if (c >= '0' && c <= '9') {
-    keycode = 0x27 + (c - '0');
-  }
-  // Special characters
-  else if (c == ' ') keycode = 0x2C;
-  else if (c == '!') { keycode = 0x1E; modifier = 0x02; }
-  else if (c == '@') { keycode = 0x1F; modifier = 0x02; }
-  else if (c == '#') { keycode = 0x20; modifier = 0x02; }
-  else if (c == '$') { keycode = 0x21; modifier = 0x02; }
-  else if (c == '%') { keycode = 0x22; modifier = 0x02; }
-  else if (c == '^') { keycode = 0x23; modifier = 0x02; }
-  else if (c == '&') { keycode = 0x24; modifier = 0x02; }
-  else if (c == '*') { keycode = 0x25; modifier = 0x02; }
-  else if (c == '(') { keycode = 0x26; modifier = 0x02; }
-  else if (c == ')') { keycode = 0x27; modifier = 0x02; }
-  else if (c == '-') keycode = 0x2D;
-  else if (c == '_') { keycode = 0x2D; modifier = 0x02; }
-  else if (c == '=') keycode = 0x2E;
-  else if (c == '+') { keycode = 0x2E; modifier = 0x02; }
-  else if (c == '[') keycode = 0x2F;
-  else if (c == '{') { keycode = 0x2F; modifier = 0x02; }
-  else if (c == ']') keycode = 0x30;
-  else if (c == '}') { keycode = 0x30; modifier = 0x02; }
-  else if (c == '\\') keycode = 0x31;
-  else if (c == '|') { keycode = 0x31; modifier = 0x02; }
-  else if (c == ';') keycode = 0x33;
-  else if (c == ':') { keycode = 0x33; modifier = 0x02; }
-  else if (c == '\'') keycode = 0x34;
-  else if (c == '"') { keycode = 0x34; modifier = 0x02; }
-  else if (c == '`') keycode = 0x35;
-  else if (c == '~') { keycode = 0x35; modifier = 0x02; }
-  else if (c == ',') keycode = 0x36;
-  else if (c == '<') { keycode = 0x36; modifier = 0x02; }
-  else if (c == '.') keycode = 0x37;
-  else if (c == '>') { keycode = 0x37; modifier = 0x02; }
-  else if (c == '/') keycode = 0x38;
-  else if (c == '?') { keycode = 0x38; modifier = 0x02; }
-  else if (c == '\n') keycode = 0x28; // Enter
-  else if (c == '\t') keycode = 0x2B; // Tab
-  
-  if (keycode) {
-    Keyboard.press(modifier, keycode);
-    delay(30);
+  if (c == '\n') {
+    Keyboard.press(KEY_RETURN);
+    delay(15);
     Keyboard.releaseAll();
-    delay(30);
+    delay(15);
+  }
+  else if (c == '\t') {
+    Keyboard.press(KEY_TAB);
+    delay(15);
+    Keyboard.releaseAll();
+    delay(15);
+  }
+  else {
+    Keyboard.press(c);
+    delay(15);
+    Keyboard.releaseAll();
+    delay(15);
   }
 }
 
@@ -95,32 +54,114 @@ void typeString(const char* str) {
   }
 }
 
-void typeRansomwareMessage() {
-  Serial.println("Typing ransomware message...\n");
+void openTerminalAndType() {
+  Serial.println("Opening terminal...\n");
+  
+  // Win + R to open Run dialog
+  Keyboard.press(KEY_LEFT_GUI);
+  Keyboard.press('r');
+  delay(50);
+  Keyboard.releaseAll();
+  delay(800);
+  
+  // Type cmd to open command prompt
+  Serial.println("Opening CMD...");
+  Keyboard.print("cmd");
+  delay(300);
+  
+  // Press Enter
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(1500);
+  
+  // Clear screen
+  Serial.println("Clearing terminal...");
+  Keyboard.print("cls");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(800);
+  
+  // Now type the ransomware message
+  Serial.println("Typing ransomware message in terminal...\n");
   
   const char* message = 
-    "\n\n\n"
-    "====================================================\n"
-    "               OOPS! YOUR FILES ARE ENCRYPTED\n"
-    "====================================================\n\n"
-    "All your files have been encrypted with military-grade\n"
-    "encryption (RSA-2048).\n\n"
-    "Do NOT try to recover your files yourself.\n\n"
-    "The only way to decrypt your files is to purchase\n"
-    "the decryption tool.\n\n"
-    "PAYMENT REQUIRED: $500 USD\n"
-    "Cryptocurrency only (Bitcoin preferred)\n\n"
-    "Bitcoin Address:\n"
-    "1A1z7agoat3wLeEKZLMQtqtmpS7356U\n\n"
-    "Contact: hacker@fakeemail.com\n\n"
-    "====================================================\n\n"
-    "JUST KIDDING! This is a FAKE PRANK!\n"
-    "Your files are SAFE!\n"
-    "You have been pranked! LOL!\n\n"
-    "====================================================\n";
+    "echo ===============================================\n"
+    "echo           WARNING! YOUR SYSTEM IS LOCKED\n"
+    "echo ===============================================\n"
+    "echo.\n"
+    "echo All your files have been encrypted!\n"
+    "echo.\n"
+    "echo Encryption Type: AES-256 + RSA-4096\n"
+    "echo Encrypted Files: 2,847\n"
+    "echo Total Size: 285.4 GB\n"
+    "echo.\n"
+    "echo DO NOT TURN OFF YOUR COMPUTER!\n"
+    "echo.\n"
+    "echo ===============================================\n"
+    "echo PAYMENT REQUIRED TO DECRYPT FILES\n"
+    "echo ===============================================\n"
+    "echo.\n"
+    "echo Payment Amount: $500 USD\n"
+    "echo Payment Method: Bitcoin Only\n"
+    "echo.\n"
+    "echo Bitcoin Wallet Address:\n"
+    "echo 1A1z7agoat3wLeEKZLMQtqtmpS7356U\n"
+    "echo.\n"
+    "echo Contact: darkweb.hacker@protonmail.com\n"
+    "echo Time Remaining: 23:45:32\n"
+    "echo.\n"
+    "echo ===============================================\n"
+    "echo.\n"
+    "echo WARNING: Do NOT attempt to decrypt files!\n"
+    "echo Unauthorized decryption attempts will result in\n"
+    "echo permanent file deletion!\n"
+    "echo.\n"
+    "echo Your computer ID: 8D4F2E9C7A1B6F3E\n"
+    "echo.\n"
+    "pause\n";
   
   typeString(message);
   
-  Serial.println("Message typed!");
-  Serial.println("Prank activated!");
+  delay(1000);
+  
+  // Type the reveal
+  Keyboard.print("echo.\n");
+  Keyboard.print("echo ===============================================\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(300);
+  
+  Keyboard.print("echo JUST KIDDING! THIS IS A FAKE PRANK!\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(300);
+  
+  Keyboard.print("echo Your files are completely SAFE!\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(300);
+  
+  Keyboard.print("echo You have been pranked by BadUSB!\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(300);
+  
+  Keyboard.print("echo ===============================================\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  delay(300);
+  
+  Keyboard.print("pause\n");
+  Keyboard.press(KEY_RETURN);
+  delay(50);
+  Keyboard.releaseAll();
+  
+  Serial.println("Prank activated in terminal!");
 }
